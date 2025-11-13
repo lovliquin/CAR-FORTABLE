@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car-fortable Ember Drive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #2d0a3d 0%, #4a0e4e 25%, #5a1a5e 50%, #3d1a47 75%, #2d0a3d 100%);
+            color: #ffffff;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 165, 0, 0.08) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(74, 14, 78, 0.6) 0%, rgba(45, 10, 61, 0.7) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 
+                        0 0 60px rgba(255, 165, 0, 0.15),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid;
+            border-image: linear-gradient(135deg, rgba(255, 165, 0, 0.4), rgba(255, 215, 0, 0.2), rgba(74, 14, 78, 0.3)) 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.1), transparent);
+            animation: shine 8s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .logo-container {
+            width: 220px;
+            height: 100px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.3));
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-shadow: 0 0 30px rgba(255, 165, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tagline {
+            text-align: center;
+            font-size: 18px;
+            background: linear-gradient(135deg, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-bar {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+            border: 1px solid;
+            border-image: linear-gradient(135deg, rgba(255, 165, 0, 0.5), rgba(255, 215, 0, 0.3)) 1;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-bar p {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .contact-numbers {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .contact-numbers a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-numbers a:hover {
+            color: #FFA500;
+            transform: scale(1.05);
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .rental-info {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+            border: 1px solid;
+            border-image: linear-gradient(135deg, rgba(255, 165, 0, 0.5), rgba(255, 215, 0, 0.3)) 1;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(255, 165, 0, 0.1),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .rental-info h3 {
+            background: linear-gradient(135deg, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 22px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .rental-info p {
+            color: #ffffff;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .rental-info .highlight {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .car-item {
+            background: linear-gradient(135deg, rgba(74, 14, 78, 0.4) 0%, rgba(90, 26, 94, 0.3) 100%);
+            padding: 28px;
+            border-radius: 18px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 165, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .car-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .car-item:hover::before {
+            opacity: 1;
+        }
+
+        .car-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(135deg, rgba(90, 26, 94, 0.5) 0%, rgba(74, 14, 78, 0.6) 100%);
+            border-color: rgba(255, 165, 0, 0.6);
+            box-shadow: 0 15px 40px rgba(255, 165, 0, 0.25),
+                        0 0 30px rgba(255, 165, 0, 0.15);
+        }
+
+        .car-name {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .car-details {
+            font-size: 13px;
+            background: linear-gradient(135deg, #d4a5d8, #e8c5ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .car-price {
+            font-size: 30px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3));
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(74, 14, 78, 0.95) 0%, rgba(45, 10, 61, 0.95) 100%);
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid;
+            border-image: linear-gradient(135deg, rgba(255, 165, 0, 0.6), rgba(255, 215, 0, 0.4)) 1;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(255, 165, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content .car-info {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.3) 0%, rgba(255, 215, 0, 0.2) 100%);
+            color: #ffffff;
+            border: 2px solid rgba(255, 165, 0, 0.5);
+        }
+
+        .btn-no:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.5) 0%, rgba(255, 215, 0, 0.3) 100%);
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid;
+            border-image: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.4), transparent) 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #d4a5d8;
+            margin-bottom: 10px;
+        }
+
+        .brand {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.4));
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 38px;
+            }
+
+            .tagline {
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+
+            .car-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-numbers {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; margin-bottom: 5px;">PRO-TRACKA</div>
+            <div style="font-size: 12px; color: #FFD700; letter-spacing: 1px;">Your Journey, Our Expertise</div>
+        </div>
+        
+        <h1>CAR-FORTABLE</h1>
+        <div class="tagline">Ember Drive With Ease</div>
+
+        <div class="contact-bar">
+            <p><strong>Contact Us:</strong></p>
+            <div class="contact-numbers">
+                <a href="tel:07051497464">📞 0705 149 7464</a>
+                <a href="tel:08164255370">📞 0816 425 5370</a>
+            </div>
+            <a href="https://wa.me/message/MJETQSJL5ZLEJ1" class="whatsapp-btn" target="_blank">💬 Chat on WhatsApp</a>
+        </div>
+
+        <div class="rental-info">
+            <h3>Daily Rental Package</h3>
+            <p>All rates are for <span class="highlight">24-hour daily rentals</span></p>
+            <p>Includes: <span class="highlight">Professional Driver</span> • <span class="highlight">Fully Fueled Vehicle</span></p>
+        </div>
+
+        <div class="car-grid" id="carGrid">
+            <!-- Cars will be populated here -->
+        </div>
+
+        <div class="footer">
+            <div class="footer-text">Powered by</div>
+            <div class="brand">PRO-TRACKA</div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2>Have You Made Your Decision?</h2>
+            <div class="car-info" id="selectedCarInfo"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-yes" id="btnYes">Yes, Book Now</button>
+                <button class="modal-btn btn-no" id="btnNo">No, Browse More</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cars = [
+            { name: "Toyota Camry", details: "2019 • Black", price: "₦145,000" },
+            { name: "Toyota Prado", details: "2019", price: "₦155,000" },
+            { name: "Hiace Bus", details: "2016", price: "₦185,000" },
+            { name: "Lexus GX460", details: "2017", price: "₦195,000" },
+            { name: "Toyota Hilux", details: "2020 • Black", price: "₦225,000" },
+            { name: "Toyota Prado", details: "2022", price: "₦255,000" },
+            { name: "Coaster Bus", details: "2017", price: "₦325,000" },
+            { name: "Hiace Bus", details: "2024", price: "₦325,000" },
+            { name: "Toyota Land Cruiser", details: "2020 • Black", price: "₦325,000" },
+            { name: "Viano", details: "2018 • Black on Black", price: "₦325,000" },
+            { name: "Toyota Hilux", details: "2024 • Black", price: "₦365,000" },
+            { name: "Mercedes GLE 350 SUV", details: "2017 • White", price: "₦375,000" },
+            { name: "Viano", details: "2021 • Brown Interior, Black Exterior", price: "₦375,000" },
+            { name: "Lexus LX570", details: "2018 • Grey", price: "₦405,000" },
+            { name: "Lexus LX570", details: "2018 • Black", price: "₦405,000" },
+            { name: "Range Rover Velar", details: "2018 • White", price: "₦405,000" },
+            { name: "Coaster Bus", details: "2024", price: "₦425,000" },
+            { name: "Mercedes GLE 43/450", details: "2018 • Black", price: "₦425,000" },
+            { name: "Toyota Land Cruiser", details: "2022 • Black", price: "₦580,000" },
+            { name: "G-Wagon", details: "2018 • White", price: "₦580,000" },
+            { name: "Toyota Prado", details: "2024", price: "₦580,000" },
+            { name: "Cadillac Escalade", details: "2024 • Black", price: "₦630,000" },
+            { name: "Mercedes GLE 53", details: "2022 • Black", price: "₦680,000" },
+            { name: "Viano", details: "2022 • Wine Interior, Black Exterior", price: "₦680,000" },
+            { name: "Lexus LX600", details: "2025 • Black", price: "₦830,000" },
+            { name: "G-Wagon", details: "2022 • Black and White", price: "₦980,000" },
+            { name: "Rolls Royce Ghost", details: "2024 • White", price: "₦980,000" },
+            { name: "Range Rover Autobiography", details: "2025", price: "₦1,030,000" },
+            { name: "Bentley Bentayga", details: "2024 • Black", price: "₦1,130,000" },
+            { name: "Corvette", details: "2023 • Red", price: "₦1,530,000" },
+            { name: "Cybertruck", details: "2024", price: "₦2,530,000" },
+            { name: "Lamborghini Urus", details: "2023 • Black", price: "₦3,030,000" },
+            { name: "Ferrari", details: "2022", price: "₦3,030,000" },
+            { name: "Audi R8", details: "2024", price: "₦3,030,000" }
+        ];
+
+        const carGrid = document.getElementById('carGrid');
+        const modal = document.getElementById('modal');
+        const selectedCarInfo = document.getElementById('selectedCarInfo');
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        
+        let currentCar = null;
+
+        // Populate cars
+        cars.forEach(car => {
+            const carDiv = document.createElement('div');
+            carDiv.className = 'car-item';
+            carDiv.innerHTML = `
+                <div class="car-name">${car.name}</div>
+                <div class="car-details">${car.details}</div>
+                <div class="car-price">${car.price}</div>
+            `;
+            
+            carDiv.addEventListener('click', () => {
+                currentCar = car;
+                selectedCarInfo.innerHTML = `
+                    <strong>${car.name}</strong><br>
+                    ${car.details}<br>
+                    <span style="color: #FFD700; font-size: 24px; font-weight: 700;">${car.price}/day</span>
+                `;
+                modal.classList.add('active');
+            });
+            
+            carGrid.appendChild(carDiv);
+        });
+
+        // Yes button - Send to WhatsApp
+        btnYes.addEventListener('click', () => {
+            if (currentCar) {
+                const message = `Hi! I'd like to book the ${currentCar.name} (${currentCar.details}) for ${currentCar.price}/day from Car-fortable.`;
+                const whatsappUrl = `https://wa.me/message/MJETQSJL5ZLEJ1?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                modal.classList.remove('active');
+            }
+        });
+
+        // No button - Close modal
+        btnNo.addEventListener('click', () => {
+            modal.classList.remove('active');
+            currentCar = null;
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                currentCar = null;
+            }
+        });
+    </script>
+</body>
+</html>
